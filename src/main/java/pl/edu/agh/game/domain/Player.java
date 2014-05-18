@@ -116,6 +116,10 @@ public class Player {
         return trace;
     }
 
+    public void addToTrace(Location location) {
+        trace.add(location);
+    }
+
     public void setOrientation(Orientation orientation) {
         this.orientation = orientation;
     }

@@ -22,7 +22,7 @@ public class GameMechanics {
 
     private List<Player> winners = new ArrayList<Player>();
 
-    public void runGame(List<Player> players, Board board) {
+    public Player runGame(List<Player> players, Board board) {
         while (moreThanOnePlayersAlive(players)) {
             for (Player p : players) {
                 p.movePlayerAndUpdateTrace(players, board);
@@ -66,6 +66,7 @@ public class GameMechanics {
         }
         winners.addAll(getAlivePlayers(players));
         logger.log(Level.INFO, getWinners(winners));
+        return winners.get(0);
     }
 
     private String getPlayers(List<Player> players) {
