@@ -1,10 +1,14 @@
 package pl.edu.agh.game.domain;
 
-public class Board //implements IEnvironmentTwoPlayers
+import environment.*;
+
+public class Board implements IEnvironmentTwoPlayers
 {
 
     private int xSize;
     private int ySize;
+
+    private int[][] tailsTable;
 
     private State oldState = null;
 
@@ -12,6 +16,16 @@ public class Board //implements IEnvironmentTwoPlayers
     {
         this.xSize = x;
         this.ySize = y;
+
+        tailsTable = new int[xSize][ySize];
+
+        for (int i = 0; i < xSize; i++)
+        {
+            for (int j = 0; j < ySize; j++)
+            {
+                tailsTable[i][j] = 0;
+            }
+        }
     }
 
     public int getxSize()
@@ -34,7 +48,7 @@ public class Board //implements IEnvironmentTwoPlayers
         this.ySize = ySize;
     }
 
-  /*  @Override
+    @Override
     public ITwoPlayerState defaultInitialTwoPlayerState()
     {
         return new State(this, new Location(3, 3), new Location(7, 7));
@@ -71,26 +85,66 @@ public class Board //implements IEnvironmentTwoPlayers
     {
 
 
-
         return null;  //To change body of created methods use File | Settings | File Templates.
     }
 
 
     @Override
-    public double getReward(IState iState, IState iState2, IAction iAction)
+    public double getReward(IState iState, IState iState2, IAction iAction) // iState - stary iState2 - nowy stan.
     {
         return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public boolean isFinal(IState iState)
+    public boolean isFinal(IState iState) //iState -> wstrzykiwane przez refree oznacza stan agenta albo bota
     {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        // tu odpowiedz czy nastąpił koniec gry, na podstawie stanu(ktoras z odległości == 0;
+        State state = (State) iState;
+        int[] freeAreaRange = state.getFreeAreaRange();
+        if (freeAreaRange[0] == 0 || freeAreaRange[1] == 0 || freeAreaRange[2] == 0)
+        {
+            return true;
+        }
+        return false;
     }
 
-    @Override
+
+    /**
+     * Who won ?
+     * <ul>
+     * <li> Two-players game :  </li>
+     * <ul>
+     * <li> Player One : -1</li>
+     * <li> Tie : 0 </li>
+     * <li> Player Two : 1 </li>
+     * </li>
+     * </ul>
+     * <li> Single-player game : </li>
+     * <ul>
+     * <li> Win : -1 </li>
+     * <li> Null: 0    </li>
+     * <li> Loose: 1 </li>
+     * </ul>
+     * </ul>
+     */
+
+    @Override // 1 - agent przergral, 0 - gramy dalej, -1 - wygrales, dostaniesz nagrode. Wołane przez refree
     public int whoWins(IState iState)
     {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
-    }*/
+        if (isFinal(iState))
+        {
+            return 1;
+        }
+
+        if (botIsDead())
+        {
+            return -1;
+        }
+        return 0;
+    }
+
+    private boolean botIsDead()
+    {
+        return false ; // TODO metoda sprawdza czy umarł przeciwnik agenta
+    }
 }

@@ -1,0 +1,3 @@
+D:/projekty/piqle/core/src/referees/TwoPlayerReferee.java:99 -> TwoPlayerState jest stanem wspólnym dla obu zawodników, trzeba to jeszcze raz przemyśleć
+
+Jeśli chcemy robic state dla dwóch osób to musimy zaimplementować nowego typu agenta również oraz klasę alghoritm jego zeby był deterministryczny

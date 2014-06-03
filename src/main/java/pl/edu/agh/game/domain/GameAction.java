@@ -12,19 +12,16 @@ import environment.IAction;
 public class GameAction implements IAction
 {
     private int direction; // -1, 0 , 1 , lewo prosto prawo
-    private int id; // ktory z botow sie rusza 1 lub 0
 
-
-    public GameAction(int direction, int id)
+    public GameAction(int direction)
     {
         this.direction = direction;
-        this.id = id;
     }
 
     @Override
     public Object copy()
     {
-        return new GameAction(direction, id);
+        return new GameAction(direction);
     }
 
     @Override
