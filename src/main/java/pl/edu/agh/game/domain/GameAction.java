@@ -2,18 +2,11 @@ package pl.edu.agh.game.domain;
 
 import environment.IAction;
 
-/**
- * Created with IntelliJ IDEA.
- * User: admin
- * Date: 20.05.14
- * Time: 21:06
- * To change this template use File | Settings | File Templates.
- */
 public class GameAction implements IAction
 {
-    private int direction; // -1, 0 , 1 , lewo prosto prawo
+    Move direction;
 
-    public GameAction(int direction)
+    public GameAction(Move direction)
     {
         this.direction = direction;
     }
@@ -27,12 +20,24 @@ public class GameAction implements IAction
     @Override
     public int nnCodingSize()
     {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        return 1;
     }
 
     @Override
     public double[] nnCoding()
     {
-        return new double[0];  //To change body of implemented methods use File | Settings | File Templates.
+        double[] doubles = new double[1];
+        doubles[0] = direction.hashCode(); // to na pewno zroznicuje?
+        return doubles;
+    }
+
+    public Move getDirection()
+    {
+        return direction;
+    }
+
+    public void setDirection(Move direction)
+    {
+        this.direction = direction;
     }
 }
