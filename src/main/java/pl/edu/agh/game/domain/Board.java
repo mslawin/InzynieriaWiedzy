@@ -2,6 +2,9 @@ package pl.edu.agh.game.domain;
 
 import environment.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static pl.edu.agh.game.domain.Orientation.*;
 import static pl.edu.agh.game.domain.Orientation.LEFT;
 
@@ -12,6 +15,8 @@ public class Board extends AbstractEnvironmentSingle
     private int ySize;
 
     private int[][] tailsTable; // 0 - nic, 1 - player, 2 - bot,
+
+    private final List<Location> trace = new ArrayList<Location>();
 
     private PlayerState oldState = null;
 
@@ -26,13 +31,7 @@ public class Board extends AbstractEnvironmentSingle
 
         tailsTable = new int[xSize][ySize];
 
-        for (int i = 0; i < xSize; i++)
-        {
-            for (int j = 0; j < ySize; j++)
-            {
-                tailsTable[i][j] = 0;
-            }
-        }
+        initializeTraces();
     }
 
     public int getxSize()
@@ -152,6 +151,12 @@ public class Board extends AbstractEnvironmentSingle
         }
 
         boolean isCorrectMove = true;
+        if(location.getX() <0 || location.getY() < 0 || location.getX() +1 >= xSize || location.getY() + 1 >= ySize)
+        {
+            PlayerState state = new PlayerState(this,null,location,orientation);
+            state.setAlive(false);
+            return state;
+        }
 
         if (tailsTable[location.getX()][location.getY()] > 0)
         {
@@ -163,6 +168,9 @@ public class Board extends AbstractEnvironmentSingle
 
         PlayerState newState = new PlayerState(this, freeArea, location, orientation);
         newState.setAlive(isCorrectMove);
+
+        trace.add(location);
+
         return newState;
     }
 
@@ -333,6 +341,9 @@ public class Board extends AbstractEnvironmentSingle
     @Override
     public IState defaultInitialState()
     {
+        initializeTraces();
+
+
         Location location = new Location();
         location.setX(5);
         location.setY(5);
@@ -342,6 +353,17 @@ public class Board extends AbstractEnvironmentSingle
         int[] startingFreeDistance = calculateFreeArea(location, orientation);
 
         return new PlayerState(this, startingFreeDistance, location, orientation);
+    }
+
+    private void initializeTraces()
+    {
+        for (int i = 0; i < xSize; i++)
+        {
+            for (int j = 0; j < ySize; j++)
+            {
+                tailsTable[i][j] = 0;
+            }
+        }
     }
 
     public void printTailsTable()
@@ -355,5 +377,10 @@ public class Board extends AbstractEnvironmentSingle
             }
             System.out.println();
         }
+    }
+
+    public List<Location> getTrace()
+    {
+        return trace;
     }
 }
