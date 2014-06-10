@@ -12,6 +12,8 @@
 
     <%
         int[][] tailsTable = (int[][]) request.getAttribute("tailsTable");
+        int criticalX = (Integer) request.getAttribute("criticalX");
+        int criticalY = (Integer) request.getAttribute("criticalY");
     %>
 </head>
 <body>
@@ -23,12 +25,19 @@
                 <tr>
                     <%
                         for (int j = 0; j < tailsTable[i].length; j++) {
-                            if (tailsTable[i][j] > 0) {
+                            if (i == criticalX && j == criticalY) {
                     %>
-                    <td bgcolor="blue" width="20px" height="20px"></td>
+                    <td bgcolor="red" width="20px" height="20px"><%= tailsTable[i][j]%>
+                    </td>
                     <%
-                            } else{
-                                %>
+                            }
+                            else if (tailsTable[i][j] > 0) {
+                    %>
+                    <td bgcolor="blue" width="20px" height="20px"><%= tailsTable[i][j]%>
+                    </td>
+                    <%
+                    } else {
+                    %>
                     <td bgcolor="#d3d3d3" width="20px" height="20px">&nbsp;</td>
                     <%
                             }

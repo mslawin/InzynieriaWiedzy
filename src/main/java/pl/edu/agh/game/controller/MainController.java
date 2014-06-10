@@ -51,8 +51,8 @@ public class MainController {
         }
 
         request.setAttribute("tailsTable", board.getTailsTable());
-
-        board.printTailsTable();
+        request.setAttribute("criticalX", board.getCriticalX());
+        request.setAttribute("criticalY", board.getCriticalY());
 
         return "results";
     }

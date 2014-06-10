@@ -16,6 +16,12 @@ public class Board extends AbstractEnvironmentSingle
     private int xSize;
     private int ySize;
 
+    private int criticalX;
+
+    private int criticalY;
+
+    private int moveNumber = 0;
+
     private Location startLocation;
 
     private int[][] tailsTable; // 0 - nic, 1 - player, 2 - bot,
@@ -163,12 +169,15 @@ public class Board extends AbstractEnvironmentSingle
             return state;
         }
 
-        if (tailsTable[location.getX()][location.getY()] > 0)
-        {
+        if (tailsTable[location.getX()][location.getY()] > 0) {
             isCorrectMove = false;
+            criticalX = location.getX();
+            criticalY = location.getY();
         }
 
-        tailsTable[location.getX()][location.getY()] = 1;
+        tailsTable[location.getX()][location.getY()] = moveNumber;
+
+        this.moveNumber++;
         int[] freeArea = calculateFreeArea(location, orientation);
 
         PlayerState newState = new PlayerState(this, freeArea, location, orientation);
@@ -280,7 +289,6 @@ public class Board extends AbstractEnvironmentSingle
         return counter;
     }
 
-
     @Override
     public double getReward(IState iState, IState iState2, IAction iAction) // iState - stary iState2 - nowy stan.
     {
@@ -296,13 +304,13 @@ public class Board extends AbstractEnvironmentSingle
 
     }
 
+
     @Override
     public boolean isFinal(IState iState) //iState -> wstrzykiwane przez refree oznacza stan agenta albo bota
     {
         PlayerState state = (PlayerState) iState;
         return !state.isAlive();
     }
-
 
     /**
      * Who won ?
@@ -338,6 +346,7 @@ public class Board extends AbstractEnvironmentSingle
         return 0;
     }
 
+
     private boolean botIsDead()
     {
         return false; // TODO metoda sprawdza czy umarł przeciwnik agenta, mozna tu wcisnac nawet ruch bota i od razu sprawdzanie
@@ -347,6 +356,8 @@ public class Board extends AbstractEnvironmentSingle
     public IState defaultInitialState()
     {
         initializeTraces();
+
+        this.moveNumber = 0;
 
         Orientation orientation = Orientation.UP;
 
@@ -386,5 +397,13 @@ public class Board extends AbstractEnvironmentSingle
     public List<Location> getTrace()
     {
         return trace;
+    }
+
+    public int getCriticalX() {
+        return criticalX;
+    }
+
+    public int getCriticalY() {
+        return criticalY;
     }
 }
