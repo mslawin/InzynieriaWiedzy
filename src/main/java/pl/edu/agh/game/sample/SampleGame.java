@@ -27,6 +27,6 @@ public class SampleGame {
         players.add(player);
 
         GameMechanics gameMechanics = new GameMechanics();
-        gameMechanics.runGame(players, new Board(10, 10));
+        gameMechanics.runGame(players, new Board(10, 10, 5, 5));
     }
 }

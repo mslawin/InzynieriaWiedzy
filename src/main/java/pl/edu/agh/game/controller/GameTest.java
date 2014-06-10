@@ -10,7 +10,7 @@ public class GameTest
 {
     public void play()
     {
-        Board board = new Board(20, 20);
+        Board board = new Board(20, 20, 5, 5);
 
         QLearningSelector sql1 = new QLearningSelector();
 

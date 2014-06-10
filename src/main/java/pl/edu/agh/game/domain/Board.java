@@ -1,18 +1,22 @@
 package pl.edu.agh.game.domain;
 
-import environment.*;
+import environment.AbstractEnvironmentSingle;
+import environment.ActionList;
+import environment.IAction;
+import environment.IState;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static pl.edu.agh.game.domain.Orientation.*;
-import static pl.edu.agh.game.domain.Orientation.LEFT;
 
 public class Board extends AbstractEnvironmentSingle
 {
 
     private int xSize;
     private int ySize;
+
+    private Location startLocation;
 
     private int[][] tailsTable; // 0 - nic, 1 - player, 2 - bot,
 
@@ -24,12 +28,13 @@ public class Board extends AbstractEnvironmentSingle
     public final int LEFT_INDEX = 1;
     public final int RIGHT_INDEX = 2;
 
-    public Board(int x, int y)
+    public Board(int x, int y, int startLocationX, int startLocationY)
     {
         this.xSize = x;
         this.ySize = y;
+        this.startLocation = new Location(startLocationX, startLocationY);
 
-        tailsTable = new int[xSize][ySize];
+        this.tailsTable = new int[xSize][ySize];
 
         initializeTraces();
     }
@@ -343,16 +348,11 @@ public class Board extends AbstractEnvironmentSingle
     {
         initializeTraces();
 
-
-        Location location = new Location();
-        location.setX(5);
-        location.setY(5);
-
         Orientation orientation = Orientation.UP;
 
-        int[] startingFreeDistance = calculateFreeArea(location, orientation);
+        int[] startingFreeDistance = calculateFreeArea(startLocation, orientation);
 
-        return new PlayerState(this, startingFreeDistance, location, orientation);
+        return new PlayerState(this, startingFreeDistance, startLocation, orientation);
     }
 
     private void initializeTraces()
@@ -377,6 +377,10 @@ public class Board extends AbstractEnvironmentSingle
             }
             System.out.println();
         }
+    }
+
+    public int[][] getTailsTable() {
+        return this.tailsTable;
     }
 
     public List<Location> getTrace()
